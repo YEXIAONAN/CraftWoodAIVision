@@ -9,15 +9,13 @@
 
     <el-card shadow="never">
       <template #header>
-        <div class="card-header">
-          <el-radio-group v-model="filterAction" @change="fetchData" size="small">
-            <el-radio-button label="">全部</el-radio-button>
-            <el-radio-button label="入库">入库</el-radio-button>
-            <el-radio-button label="仓储巡检">仓储巡检</el-radio-button>
-            <el-radio-button label="出库复检">出库复检</el-radio-button>
-            <el-radio-button label="出库">出库</el-radio-button>
-          </el-radio-group>
-        </div>
+        <el-radio-group v-model="filterAction" @change="fetchData" size="small">
+          <el-radio-button label="">全部</el-radio-button>
+          <el-radio-button label="入库">入库</el-radio-button>
+          <el-radio-button label="仓储巡检">仓储巡检</el-radio-button>
+          <el-radio-button label="出库复检">出库复检</el-radio-button>
+          <el-radio-button label="出库">出库</el-radio-button>
+        </el-radio-group>
       </template>
       <el-table :data="records" stripe v-loading="loading">
         <el-table-column prop="id" label="记录编号" width="120" />
@@ -25,7 +23,10 @@
         <el-table-column prop="productName" label="产品名称" min-width="150" />
         <el-table-column prop="action" label="操作类型" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.action === '出库' ? 'warning' : row.action === '入库' ? 'success' : 'info'" size="small">{{ row.action }}</el-tag>
+            <el-tag
+              :type="row.action === '出库' ? 'warning' : row.action === '入库' ? 'success' : 'info'"
+              size="small"
+            >{{ row.action }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="operator" label="操作人" width="100" />
@@ -98,9 +99,8 @@ onMounted(fetchData)
 </script>
 
 <style scoped>
-.warehouse-page { max-width: 1200px; margin: 0 auto; }
+.warehouse-page { max-width: 1320px; margin: 0 auto; }
 .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .page-header h2 { font-size: 22px; }
-.card-header { display: flex; align-items: center; }
 .pagination-wrap { display: flex; justify-content: center; margin-top: 20px; }
 </style>

@@ -21,7 +21,10 @@
         <el-table-column prop="productName" label="产品" min-width="140" />
         <el-table-column prop="type" label="问题类型" width="120">
           <template #default="{ row }">
-            <el-tag :type="row.type === '运输损坏' ? 'danger' : row.type === '质量异议' ? 'warning' : 'info'" size="small">{{ row.type }}</el-tag>
+            <el-tag
+              :type="row.type === '运输损坏' ? 'danger' : row.type === '质量异议' ? 'warning' : 'info'"
+              size="small"
+            >{{ row.type }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="description" label="问题描述" min-width="200" show-overflow-tooltip />
@@ -107,7 +110,7 @@ onMounted(fetchData)
 </script>
 
 <style scoped>
-.after-sales-page { max-width: 1200px; margin: 0 auto; }
+.after-sales-page { max-width: 1320px; margin: 0 auto; }
 .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .page-header h2 { font-size: 22px; }
 .pagination-wrap { display: flex; justify-content: center; margin-top: 20px; }

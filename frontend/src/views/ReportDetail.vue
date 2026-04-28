@@ -21,23 +21,30 @@
       <el-divider />
 
       <el-descriptions :column="2" border>
-        <el-descriptions-item label="产品编号" :span="1">{{ report.productId }}</el-descriptions-item>
-        <el-descriptions-item label="产品名称" :span="1">{{ report.productName }}</el-descriptions-item>
+        <el-descriptions-item label="产品编号">{{ report.productId }}</el-descriptions-item>
+        <el-descriptions-item label="产品名称">{{ report.productName }}</el-descriptions-item>
         <el-descriptions-item label="检测人员">{{ report.inspector }}</el-descriptions-item>
         <el-descriptions-item label="检测日期">{{ report.date }}</el-descriptions-item>
         <el-descriptions-item label="质检结论">
-          <span :style="{ color: report.conclusion === '合格' ? '#67c23a' : '#f56c6c', fontWeight: 600 }">{{ report.conclusion }}</span>
+          <span :style="{ color: report.conclusion === '合格' ? '#4A7C59' : '#C0392B', fontWeight: 600 }">
+            {{ report.conclusion }}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item label="风险等级">
-          <StatusBadge :status="report.risk === '低风险' ? 'low' : report.risk === '中风险' ? 'medium' : 'high'" :label="report.risk" />
+          <StatusBadge
+            :status="report.risk === '低风险' ? 'low' : report.risk === '中风险' ? 'medium' : 'high'"
+            :label="report.risk"
+          />
         </el-descriptions-item>
         <el-descriptions-item label="质检评分">
-          <span :style="{ color: report.score >= 85 ? '#67c23a' : '#e6a23c', fontWeight: 700 }">{{ report.score }}</span>
+          <span :style="{ color: report.score >= 85 ? '#4A7C59' : '#D4913E', fontWeight: 700 }">
+            {{ report.score }}
+          </span>
         </el-descriptions-item>
       </el-descriptions>
 
       <el-divider />
-      <h4 style="margin-bottom:12px">检测依据与说明</h4>
+      <h4 style="margin-bottom:12px;font-size:15px">检测依据与说明</h4>
       <p class="report-note">
         本报告基于 AI 视觉检测模型对产品表面进行缺陷识别，结合人工复核后生成。检测结果仅反映本次送检产品表面质量状况，不作为产品整体质量承诺。
       </p>
@@ -76,10 +83,14 @@ onMounted(fetchData)
 .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .page-header h2 { flex: 1; font-size: 20px; }
 .header-actions { display: flex; gap: 8px; }
-.report-title { text-align: center; padding: 20px 0; }
-.report-stamp { width: 60px; height: 60px; border: 3px solid var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
-.report-stamp span { font-size: 28px; color: var(--color-primary); font-weight: bold; }
+.report-title { text-align: center; padding: 24px 0; }
+.report-stamp {
+  width: 64px; height: 64px; border: 3px solid var(--color-primary);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+}
+.report-stamp span { font-size: 28px; color: var(--color-primary); font-weight: 900; }
 .report-title h2 { font-size: 22px; margin-bottom: 8px; }
-.report-title p { font-size: 13px; color: var(--color-text-secondary); }
+.report-title p { font-size: 13px; color: var(--color-text-muted); }
 .report-note { font-size: 14px; color: var(--color-text-secondary); line-height: 1.8; text-indent: 2em; }
 </style>

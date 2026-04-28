@@ -12,5 +12,16 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-echarts': ['echarts', 'vue-echarts'],
+          'vendor-element': ['element-plus', '@element-plus/icons-vue'],
+          'vendor-vue': ['vue', 'vue-router', 'pinia']
+        }
+      }
+    }
   }
 })

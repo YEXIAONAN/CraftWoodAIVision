@@ -1,9 +1,10 @@
 <template>
   <div class="not-found">
     <div class="not-found-content">
-      <h1>404</h1>
-      <p>页面未找到</p>
-      <el-button type="primary" @click="$router.push('/dashboard')">返回首页</el-button>
+      <span class="code">404</span>
+      <h2>页面未找到</h2>
+      <p>您访问的页面不存在或已被移除</p>
+      <el-button type="primary" size="large" @click="$router.push('/dashboard')">返回工作台</el-button>
     </div>
   </div>
 </template>
@@ -14,9 +15,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg);
+  background: var(--bg-main);
 }
 .not-found-content { text-align: center; }
-.not-found-content h1 { font-size: 80px; color: var(--color-primary); margin-bottom: 8px; }
-.not-found-content p { font-size: 18px; color: var(--color-text-secondary); margin-bottom: 24px; }
+.code {
+  font-family: 'Inter', sans-serif;
+  font-size: 96px;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: block;
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+  opacity: 0.8;
+}
+.not-found-content h2 { font-size: 20px; color: var(--color-text); margin-bottom: 8px; }
+.not-found-content p { font-size: 14px; color: var(--color-text-muted); margin-bottom: 24px; }
 </style>

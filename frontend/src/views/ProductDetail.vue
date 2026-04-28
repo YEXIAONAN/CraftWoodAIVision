@@ -12,8 +12,12 @@
         <el-card shadow="never">
           <template #header>产品图片</template>
           <div class="product-image">
-            <el-image :src="product.image" fit="cover" style="width:100%;height:200px;border-radius:8px">
-              <template #error><div class="image-placeholder"><el-icon :size="32"><Picture /></el-icon></div></template>
+            <el-image :src="product.image" fit="cover" style="width:100%;height:220px;border-radius:10px">
+              <template #error>
+                <div class="image-placeholder">
+                  <el-icon :size="32" color="#C4A882"><Picture /></el-icon>
+                </div>
+              </template>
             </el-image>
           </div>
         </el-card>
@@ -35,9 +39,8 @@
             <el-descriptions-item label="负责人">{{ product.inspector }}</el-descriptions-item>
             <el-descriptions-item label="建档日期">{{ product.date }}</el-descriptions-item>
           </el-descriptions>
-          <div class="actions" style="margin-top:16px">
+          <div class="actions">
             <el-button type="primary" @click="$router.push(`/inspection?productId=${product.id}`)">发起质检</el-button>
-            <el-button @click="handleQR">查看追溯码</el-button>
             <el-button @click="$router.push(`/reports?productId=${product.id}`)">质检报告</el-button>
           </div>
         </el-card>
@@ -63,17 +66,18 @@ async function fetchData() {
   product.value = res.data
   loading.value = false
 }
-function handleQR() {
-  ElMessage.info('二维码功能已在产品列表页实现')
-}
 
 onMounted(fetchData)
 </script>
 
 <style scoped>
-.product-detail { max-width: 1200px; margin: 0 auto; }
+.product-detail { max-width: 1100px; margin: 0 auto; }
 .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .page-header h2 { font-size: 20px; }
 .product-image { display: flex; justify-content: center; }
-.image-placeholder { height: 200px; display: flex; align-items: center; justify-content: center; background: var(--color-bg); border-radius: 8px; }
+.image-placeholder {
+  height: 220px; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-input); border-radius: 10px;
+}
+.actions { margin-top: 16px; display: flex; gap: 8px; }
 </style>

@@ -30,10 +30,10 @@
             v-for="(ins, i) in trace.inspections"
             :key="i"
             :timestamp="ins.date"
-            :color="ins.result === '合格' ? '#67C23A' : '#E6A23C'"
+            :color="ins.result === '合格' ? '#4A7C59' : '#D4913E'"
           >
             <p><strong>{{ ins.scene }}</strong> — {{ ins.result }}</p>
-            <p style="font-size:12px;color:var(--color-text-secondary)">风险等级：{{ ins.risk }}</p>
+            <p style="font-size:12px;color:var(--color-text-muted);margin-top:2px">风险等级：{{ ins.risk }}</p>
           </el-timeline-item>
         </el-timeline>
       </el-card>
@@ -71,7 +71,7 @@ onMounted(async () => {
 <style scoped>
 .trace-page {
   min-height: 100vh;
-  background: var(--color-bg);
+  background: var(--bg-main);
   display: flex;
   justify-content: center;
   padding: 40px 16px;
@@ -79,11 +79,15 @@ onMounted(async () => {
 .trace-container { max-width: 640px; width: 100%; }
 .trace-header { margin-bottom: 24px; }
 .trace-brand { display: flex; align-items: center; gap: 16px; }
-.trace-brand .brand-icon { width: 48px; height: 48px; background: var(--color-primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--color-white); }
+.brand-icon {
+  width: 48px; height: 48px; background: var(--color-primary);
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: #FFFFFF; font-family: 'Noto Serif SC', serif; font-weight: 900;
+}
 .trace-brand h1 { font-size: 20px; color: var(--color-text); }
-.trace-brand p { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+.trace-brand p { font-size: 13px; color: var(--color-text-muted); margin-top: 2px; }
 .trace-card { margin-bottom: 16px; }
 .maintain-text { font-size: 14px; line-height: 1.8; color: var(--color-text); }
-.trace-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--color-text-secondary); }
+.trace-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--color-text-muted); }
 .trace-footer p { margin-bottom: 4px; }
 </style>

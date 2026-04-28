@@ -7,11 +7,10 @@
       </el-button>
     </div>
 
-    <!-- Filters -->
-    <el-card class="filter-card" shadow="never">
+    <el-card shadow="never" class="filter-card">
       <el-form :inline="true" :model="filters">
         <el-form-item label="关键词">
-          <el-input v-model="filters.keyword" placeholder="产品名称/编号" clearable @clear="fetchData" @keyup.enter="fetchData" />
+          <el-input v-model="filters.keyword" placeholder="产品名称/编号" clearable @clear="fetchData" @keyup.enter="fetchData" style="width:200px" />
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="filters.status" placeholder="全部" clearable @change="fetchData" style="width:140px">
@@ -27,7 +26,6 @@
       </el-form>
     </el-card>
 
-    <!-- Table -->
     <el-card shadow="never">
       <el-table :data="products" stripe v-loading="loading" style="width: 100%">
         <el-table-column prop="id" label="编号" width="120" />
@@ -46,7 +44,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="inspector" label="负责人" width="100" />
-        <el-table-column label="操作" width="120" fixed="right">
+        <el-table-column label="操作" width="140" fixed="right">
           <template #default="{ row }">
             <el-button text type="primary" size="small" @click="$router.push(`/products/${row.id}`)">详情</el-button>
             <el-button text type="primary" size="small" @click="handleQR(row)">二维码</el-button>
@@ -59,7 +57,7 @@
     </el-card>
 
     <!-- Create Dialog -->
-    <el-dialog v-model="showForm" title="新建产品档案" width="600px">
+    <el-dialog v-model="showForm" title="新建产品档案" width="560px">
       <el-form :model="form" label-width="100px">
         <el-form-item label="产品名称">
           <el-input v-model="form.name" />
@@ -92,13 +90,13 @@
     <el-dialog v-model="showQR" title="产品追溯码" width="360px">
       <div class="qr-display">
         <div class="qr-placeholder">
-          <el-icon :size="48" color="#8B5E3C"><Goods /></el-icon>
+          <el-icon :size="40" color="#8B4513"><Goods /></el-icon>
           <p class="qr-product">{{ qrProduct?.name }}</p>
           <p class="qr-id">{{ qrProduct?.id }}</p>
           <div class="qr-code">
             <div class="qr-simulate">
-              <div v-for="i in 20" :key="i" class="qr-row">
-                <span v-for="j in 20" :key="j" class="qr-cell" :class="{ filled: (i * j + i + j) % 3 !== 0 }" />
+              <div v-for="i in 16" :key="i" class="qr-row">
+                <span v-for="j in 16" :key="j" class="qr-cell" :class="{ filled: (i * j + i + j) % 3 !== 0 }" />
               </div>
             </div>
           </div>
@@ -148,19 +146,27 @@ onMounted(fetchData)
 </script>
 
 <style scoped>
-.product-list { max-width: 1400px; margin: 0 auto; }
+.product-list { max-width: 1320px; margin: 0 auto; }
 .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .page-header h2 { font-size: 22px; }
 .filter-card { margin-bottom: 16px; }
 .pagination-wrap { display: flex; justify-content: center; margin-top: 20px; }
+
 .qr-display { text-align: center; }
 .qr-product { font-size: 16px; font-weight: 600; margin-top: 12px; }
-.qr-id { font-size: 12px; color: var(--color-text-secondary); margin: 4px 0 16px; }
+.qr-id { font-size: 12px; color: var(--color-text-muted); margin: 4px 0 16px; }
 .qr-code { display: flex; justify-content: center; margin-bottom: 12px; }
-.qr-simulate { width: 160px; height: 160px; display: grid; grid-template-rows: repeat(20, 1fr); gap: 1px; padding: 8px; background: var(--color-white); border: 2px solid var(--color-text); border-radius: 8px; }
-.qr-row { display: grid; grid-template-columns: repeat(20, 1fr); gap: 1px; }
+.qr-simulate {
+  width: 140px; height: 140px;
+  display: grid; grid-template-rows: repeat(16, 1fr); gap: 1px;
+  padding: 6px;
+  background: var(--color-white);
+  border: 2px solid var(--color-text);
+  border-radius: 8px;
+}
+.qr-row { display: grid; grid-template-columns: repeat(16, 1fr); gap: 1px; }
 .qr-cell { aspect-ratio: 1; background: var(--color-white); }
 .qr-cell.filled { background: var(--color-text); }
-.qr-hint { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 12px; }
+.qr-hint { font-size: 12px; color: var(--color-text-muted); margin-bottom: 12px; }
 .qr-btn { width: 100%; }
 </style>

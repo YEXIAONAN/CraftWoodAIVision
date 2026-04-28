@@ -7,6 +7,29 @@ import App from './App.vue'
 import router from './router'
 import './styles/global.css'
 
+// Centralized ECharts registration (register once, use everywhere)
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+import { LineChart, PieChart, BarChart, GaugeChart } from 'echarts/charts'
+import {
+  GridComponent,
+  TooltipComponent,
+  LegendComponent,
+  TitleComponent
+} from 'echarts/components'
+
+use([
+  CanvasRenderer,
+  LineChart,
+  BarChart,
+  PieChart,
+  GaugeChart,
+  GridComponent,
+  TooltipComponent,
+  LegendComponent,
+  TitleComponent
+])
+
 const app = createApp(App)
 
 // Register all Element Plus icons
@@ -16,8 +39,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.use(createPinia())
 app.use(router)
-app.use(ElementPlus, {
-  // Brown theme overrides via CSS variables
-})
+app.use(ElementPlus)
 
 app.mount('#app')

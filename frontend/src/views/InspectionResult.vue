@@ -11,20 +11,22 @@
       <el-row :gutter="20">
         <el-col :span="14">
           <el-card shadow="never">
-            <template #header>
-              <span>检测图像对比</span>
-            </template>
+            <template #header>检测图像对比</template>
             <el-row :gutter="12">
               <el-col :span="12">
                 <p class="img-label">原始图像</p>
-                <el-image :src="item.image" fit="contain" style="width:100%;height:280px;border-radius:8px">
+                <el-image :src="item.image" fit="contain" style="width:100%;height:280px;border-radius:10px">
                   <template #error><div class="img-placeholder" /></template>
                 </el-image>
               </el-col>
               <el-col :span="12">
                 <p class="img-label">标注图像</p>
-                <el-image :src="item.annotatedImage" fit="contain" style="width:100%;height:280px;border-radius:8px">
-                  <template #error><div class="img-placeholder"><el-icon><Warning /></el-icon>标注预览</div></template>
+                <el-image :src="item.annotatedImage" fit="contain" style="width:100%;height:280px;border-radius:10px">
+                  <template #error>
+                    <div class="img-placeholder">
+                      <el-icon><Warning /></el-icon>标注预览
+                    </div>
+                  </template>
                 </el-image>
               </el-col>
             </el-row>
@@ -45,7 +47,9 @@
                 <StatusBadge :status="item.risk" :label="item.riskLabel" />
               </el-descriptions-item>
               <el-descriptions-item label="质检评分">
-                <span :style="{ color: item.score >= 85 ? '#67c23a' : item.score >= 70 ? '#e6a23c' : '#f56c6c', fontWeight: 700 }">{{ item.score }}</span>
+                <span :style="{ color: item.score >= 85 ? '#4A7C59' : item.score >= 70 ? '#D4913E' : '#C0392B', fontWeight: 700 }">
+                  {{ item.score }}
+                </span>
               </el-descriptions-item>
             </el-descriptions>
           </el-card>
@@ -65,9 +69,8 @@
 
       <el-card shadow="never" style="margin-top:16px">
         <template #header>处理建议</template>
-        <div v-if="item.notes" class="notes-text">{{ item.notes }}</div>
-        <div v-else class="notes-text">无明显异常，可正常流转。</div>
-        <div style="margin-top:12px;display:flex;gap:8px">
+        <div class="notes-text">{{ item.notes || '无明显异常，可正常流转。' }}</div>
+        <div class="result-actions">
           <el-button type="primary" @click="$router.push('/reports')">查看质检报告</el-button>
           <el-button @click="handleReview">确认复核</el-button>
         </div>
@@ -101,10 +104,14 @@ onMounted(fetchData)
 </script>
 
 <style scoped>
-.inspection-result { max-width: 1200px; margin: 0 auto; }
+.inspection-result { max-width: 1100px; margin: 0 auto; }
 .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .page-header h2 { font-size: 20px; }
-.img-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px; text-align: center; }
-.img-placeholder { height: 280px; display: flex; align-items: center; justify-content: center; background: var(--color-bg); border-radius: 8px; color: var(--color-text-secondary); gap: 8px; }
-.notes-text { font-size: 14px; color: var(--color-text); line-height: 1.6; }
+.img-label { font-size: 13px; color: var(--color-text-muted); margin-bottom: 8px; text-align: center; }
+.img-placeholder {
+  height: 280px; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-input); border-radius: 10px; color: var(--color-text-muted); gap: 8px;
+}
+.notes-text { font-size: 14px; color: var(--color-text); line-height: 1.8; }
+.result-actions { margin-top: 12px; display: flex; gap: 8px; }
 </style>

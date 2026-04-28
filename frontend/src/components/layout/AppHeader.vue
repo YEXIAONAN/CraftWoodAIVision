@@ -1,34 +1,40 @@
 <template>
   <header class="app-header">
-    <div class="header-bg" />
     <div class="header-left">
-      <el-button text @click="appStore.toggleSidebar" class="collapse-btn">
-        <el-icon :size="18"><Fold v-if="!appStore.sidebarCollapsed" /><Expand v-else /></el-icon>
-      </el-button>
-      <el-breadcrumb separator="/" class="header-breadcrumb">
+      <button class="collapse-btn" @click="appStore.toggleSidebar">
+        <el-icon :size="18">
+          <Fold v-if="!appStore.sidebarCollapsed" />
+          <Expand v-else />
+        </el-icon>
+      </button>
+      <el-breadcrumb separator="·" class="header-breadcrumb">
         <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="route.meta.title">{{ route.meta.title }}</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="route.meta.title && !route.meta.hidden">
+          {{ route.meta.title }}
+        </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div class="header-center">
-      <span class="env-hint">🌡 温度 24°C · 湿度 52%</span>
-    </div>
+
     <div class="header-right">
       <span class="header-time">{{ currentTime }}</span>
-      <el-tooltip content="通知" placement="bottom">
-        <el-button text class="header-icon-btn">
+      <el-tooltip content="通知中心" placement="bottom">
+        <button class="icon-btn">
           <el-icon :size="18"><Bell /></el-icon>
           <span class="notif-dot" />
-        </el-button>
+        </button>
       </el-tooltip>
-      <el-dropdown trigger="click">
-        <span class="user-info">
-          <el-avatar :size="32" class="user-avatar">{{ authStore.user?.name?.[0] || '管' }}</el-avatar>
+      <el-dropdown trigger="click" placement="bottom-end">
+        <div class="user-info">
+          <div class="user-avatar">{{ authStore.user?.name?.[0] || '管' }}</div>
           <span class="user-name">{{ authStore.user?.name || '管理员' }}</span>
-        </span>
+          <el-icon :size="12" class="user-arrow"><ArrowDown /></el-icon>
+        </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="handleLogout">
+            <el-dropdown-item>
+              <el-icon><User /></el-icon>个人设置
+            </el-dropdown-item>
+            <el-dropdown-item divided @click="handleLogout">
               <el-icon><SwitchButton /></el-icon>退出登录
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -53,12 +59,15 @@ const currentTime = ref('')
 let timer
 function updateTime() {
   const now = new Date()
-  currentTime.value = now.toLocaleString('zh-CN', {
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
-    hour12: false
-  })
+  const h = String(now.getHours()).padStart(2, '0')
+  const m = String(now.getMinutes()).padStart(2, '0')
+  currentTime.value = `${h}:${m}`
 }
-onMounted(() => { updateTime(); timer = setInterval(updateTime, 1000) })
+
+onMounted(() => {
+  updateTime()
+  timer = setInterval(updateTime, 30000) // every 30s instead of 1s
+})
 onUnmounted(() => clearInterval(timer))
 
 function handleLogout() {
@@ -78,87 +87,125 @@ function handleLogout() {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid rgba(217, 197, 167, 0.4);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-header);
 }
-.header-bg {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(247,244,235,0.5) 0%, rgba(255,255,255,0.8) 100%);
-  pointer-events: none;
-}
+
 .header-left {
   display: flex;
   align-items: center;
   gap: 16px;
-  position: relative;
-  z-index: 1;
 }
+
 .collapse-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
   color: var(--color-text-secondary);
-  transition: color 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s var(--ease-in-out);
 }
-.collapse-btn:hover { color: var(--color-primary); }
-.header-breadcrumb :deep(.el-breadcrumb__inner) { font-size: 13px; }
-.header-center {
-  position: relative;
-  z-index: 1;
+.collapse-btn:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--color-primary);
 }
-.env-hint {
-  font-size: 12px;
-  color: var(--color-text-muted);
-  letter-spacing: 0.5px;
+
+.header-breadcrumb :deep(.el-breadcrumb__inner) {
+  font-size: 13px;
 }
+
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
-  position: relative;
-  z-index: 1;
+  gap: 8px;
 }
+
 .header-time {
   font-family: 'Inter', monospace;
   font-size: 13px;
+  font-weight: 500;
   color: var(--color-text-secondary);
-  letter-spacing: 0.5px;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 10px;
+  background: var(--bg-table-header);
+  border-radius: 8px;
 }
-.header-icon-btn {
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
   color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  transition: all 0.2s var(--ease-in-out);
 }
+.icon-btn:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--color-text);
+}
+
 .notif-dot {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 6px;
-  height: 6px;
-  background: var(--color-primary);
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  background: var(--color-red);
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid #FFFFFF;
 }
+
 .user-info {
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  padding: 4px 10px;
-  border-radius: 20px;
-  transition: background 0.2s;
+  padding: 4px 8px 4px 4px;
+  border-radius: 10px;
+  transition: background 0.2s var(--ease-in-out);
 }
 .user-info:hover {
-  background: var(--bg-row-hover);
+  background: var(--bg-sidebar-hover);
 }
+
 .user-avatar {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)) !important;
-  color: var(--color-white) !important;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-primary), #A0522D);
+  color: #FFFFFF;
   font-family: 'Noto Serif SC', serif;
   font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
+
 .user-name {
   font-size: 13px;
   color: var(--color-text);
   font-weight: 500;
+}
+
+.user-arrow {
+  color: var(--color-text-muted);
+  margin-left: 2px;
 }
 </style>

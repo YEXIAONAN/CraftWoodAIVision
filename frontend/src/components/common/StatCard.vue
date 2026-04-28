@@ -1,24 +1,28 @@
 <template>
-  <div class="rose-stat-card" @click="$emit('click')">
-    <div class="card-accent-bar" />
-    <div class="card-inner">
-      <div class="card-info">
-        <span class="card-label">{{ label }}</span>
-        <div class="card-value-wrap">
-          <span class="card-value num" :style="{ color: color || 'var(--color-primary)' }">{{ value }}</span>
-          <span v-if="unit" class="card-unit">{{ unit }}</span>
-          <span v-if="trend" :class="['trend', trend]">
-            <el-icon :size="14"><ArrowUp v-if="trend === 'up'" /><ArrowDown v-else /></el-icon>
-            {{ trendPercent }}%
+  <div class="stat-card" @click="$emit('click')">
+    <div class="stat-body">
+      <div class="stat-info">
+        <span class="stat-label">{{ label }}</span>
+        <div class="stat-value-row">
+          <span class="stat-value" :style="{ color: color || 'var(--color-primary)' }">
+            {{ value }}
           </span>
+          <span v-if="unit" class="stat-unit">{{ unit }}</span>
         </div>
-        <span v-if="subtext" class="card-subtext">{{ subtext }}</span>
+        <span v-if="subtext" class="stat-subtext">{{ subtext }}</span>
       </div>
-      <div class="card-icon-wrap" :style="{ background: `rgba(${iconBg || '155, 58, 28'}, 0.08)` }">
-        <el-icon :size="26" :style="{ color: color || 'var(--color-primary)' }">
+      <div class="stat-icon" :style="{ background: iconBg || `${color}18` || 'rgba(139,69,19,0.08)' }">
+        <el-icon :size="22" :style="{ color: color || 'var(--color-primary)' }">
           <component :is="icon" />
         </el-icon>
       </div>
+    </div>
+    <div v-if="trend" :class="['stat-trend', trend]">
+      <el-icon :size="12">
+        <ArrowUp v-if="trend === 'up'" />
+        <ArrowDown v-else />
+      </el-icon>
+      {{ trendPercent }}% vs 昨日
     </div>
   </div>
 </template>
@@ -29,9 +33,9 @@ defineProps({
   value: [String, Number],
   unit: String,
   icon: String,
-  color: { type: String, default: '#9B3A1C' },
+  color: { type: String, default: '#8B4513' },
   iconBg: String,
-  trend: String,   // 'up' | 'down'
+  trend: String,
   trendPercent: [String, Number],
   subtext: String
 })
@@ -39,89 +43,85 @@ defineEmits(['click'])
 </script>
 
 <style scoped>
-.rose-stat-card {
-  background: var(--bg-card-warm);
-  border: 1px solid var(--color-border-card);
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
   border-radius: var(--card-radius);
   box-shadow: var(--shadow-card);
+  padding: 20px 22px;
   cursor: pointer;
-  overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(4px);
+  transition: box-shadow 0.3s var(--ease-out-expo),
+              transform 0.3s var(--ease-out-expo);
+  contain: layout style;
 }
-.rose-stat-card:hover {
-  transform: translateY(-4px);
+.stat-card:hover {
   box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
 }
-.card-accent-bar {
-  height: var(--card-accent-height);
-  width: 80px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-gold));
-  border-radius: 0 0 3px 3px;
-}
-.card-inner {
-  padding: 20px;
+.stat-body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
-.card-info {
+.stat-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-.card-label {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  letter-spacing: 0.5px;
+.stat-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
-.card-value-wrap {
+.stat-value-row {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 4px;
 }
-.card-value {
+.stat-value {
   font-family: 'Inter', sans-serif;
-  font-size: 42px;
+  font-size: 36px;
   font-weight: 800;
   line-height: 1.1;
-  letter-spacing: -1px;
+  letter-spacing: -0.02em;
 }
-.card-unit {
+.stat-unit {
   font-size: 13px;
   color: var(--color-text-secondary);
+  font-weight: 500;
 }
-.trend {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 1px 8px;
-  border-radius: 10px;
-  margin-left: 4px;
-}
-.trend.up {
-  background: rgba(95, 122, 97, 0.12);
-  color: var(--color-green-mute);
-}
-.trend.down {
-  background: rgba(155, 58, 28, 0.1);
-  color: var(--color-primary);
-}
-.card-subtext {
+.stat-subtext {
   font-size: 11px;
   color: var(--color-text-muted);
   margin-top: 2px;
 }
-.card-icon-wrap {
-  width: 52px;
-  height: 52px;
+.stat-icon {
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+.stat-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+.stat-trend.up {
+  background: var(--color-green-bg);
+  color: var(--color-green);
+}
+.stat-trend.down {
+  background: var(--color-red-bg);
+  color: var(--color-red);
 }
 </style>

@@ -4,7 +4,11 @@
     <div class="app-main" :class="{ collapsed: appStore.sidebarCollapsed }">
       <AppHeader />
       <main class="app-content">
-        <router-view />
+        <router-view v-slot="{ Component, route }">
+          <Transition name="fade-slide" mode="out-in">
+            <component :is="Component" :key="route.path" />
+          </Transition>
+        </router-view>
       </main>
     </div>
   </div>
@@ -35,16 +39,16 @@ onMounted(() => {
   margin-left: var(--sidebar-width);
   display: flex;
   flex-direction: column;
-  transition: margin-left 0.3s;
+  transition: margin-left 0.28s var(--ease-out-expo);
   min-width: 0;
 }
 .app-main.collapsed {
-  margin-left: 64px;
+  margin-left: var(--sidebar-collapsed-width);
 }
 .app-content {
   flex: 1;
-  padding: 24px;
-  background: var(--color-bg);
+  padding: 24px 28px;
   overflow-y: auto;
+  background: var(--bg-main);
 }
 </style>

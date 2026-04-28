@@ -30,65 +30,66 @@ defineProps({
   border-radius: 50%;
   flex-shrink: 0;
 }
+
 /* Risk levels */
 .rose-badge.low {
-  background: var(--bg-tag-green);
-  color: var(--color-green-mute);
+  background: var(--color-green-bg);
+  color: var(--color-green);
 }
-.rose-badge.low .dot { background: var(--color-green-mute); }
+.rose-badge.low .dot { background: var(--color-green); }
 
 .rose-badge.medium {
-  background: var(--bg-tag-amber);
-  color: #6B4F1A;
+  background: var(--color-orange-bg);
+  color: #8B6914;
 }
-.rose-badge.medium .dot { background: #CF9F5A; }
+.rose-badge.medium .dot { background: var(--color-orange); }
 
 .rose-badge.high {
-  background: var(--bg-tag-red);
-  color: var(--color-white);
+  background: var(--color-red-bg);
+  color: var(--color-red);
 }
-.rose-badge.high .dot { background: rgba(255,255,255,0.7); }
+.rose-badge.high .dot { background: var(--color-red); }
 
 /* Statuses */
 .rose-badge.已完成 {
-  background: var(--bg-tag-green);
-  color: var(--color-green-mute);
+  background: var(--color-green-bg);
+  color: var(--color-green);
 }
-.rose-badge.已完成 .dot { background: var(--color-green-mute); }
+.rose-badge.已完成 .dot { background: var(--color-green); }
 
 .rose-badge.待处理 {
-  background: var(--bg-tag-amber);
-  color: #6B4F1A;
+  background: var(--color-orange-bg);
+  color: #8B6914;
 }
-.rose-badge.待处理 .dot { background: #CF9F5A; }
+.rose-badge.待处理 .dot { background: var(--color-orange); }
 
 .rose-badge.处理中 {
-  background: rgba(64, 158, 255, 0.12);
-  color: #1D6FA3;
+  background: var(--color-blue-bg);
+  color: var(--color-blue);
 }
-.rose-badge.处理中 .dot { background: #409EFF; }
+.rose-badge.处理中 .dot { background: var(--color-blue); }
 
 .rose-badge.已关闭, .rose-badge.已出库, .rose-badge.已归档 {
-  background: #F0F0F0;
+  background: #F2F2F2;
   color: #7A7A7A;
 }
 .rose-badge.已关闭 .dot, .rose-badge.已出库 .dot, .rose-badge.已归档 .dot { background: #7A7A7A; }
 
 .rose-badge.已入库 {
-  background: var(--bg-tag-green);
-  color: var(--color-green-mute);
+  background: var(--color-green-bg);
+  color: var(--color-green);
 }
-.rose-badge.已入库 .dot { background: var(--color-green-mute); }
+.rose-badge.已入库 .dot { background: var(--color-green); }
 
 .rose-badge.仓储中 {
-  background: rgba(64, 158, 255, 0.12);
-  color: #1D6FA3;
+  background: var(--color-blue-bg);
+  color: var(--color-blue);
 }
-.rose-badge.仓储中 .dot { background: #409EFF; }
+.rose-badge.仓储中 .dot { background: var(--color-blue); }
 
 .rose-badge.待出库 {
-  background: var(--bg-tag-amber);
-  color: #6B4F1A;
+  background: var(--color-orange-bg);
+  color: #8B6914;
 }
-.rose-badge.待出库 .dot { background: #CF9F5A; }
+.rose-badge.待出库 .dot { background: var(--color-orange); }
 </style>
