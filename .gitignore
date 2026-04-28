@@ -11,9 +11,12 @@ frontend/dist
 # Backend
 backend/__pycache__/
 backend/*.py[cod]
-backend/.venv/
+backend/.venv*/
 backend/venv/
 backend/*.egg-info/
+backend/craftwood.db
+backend/craftwood.db-shm
+backend/craftwood.db-wal
 
 # Docker
 mysql-data/
