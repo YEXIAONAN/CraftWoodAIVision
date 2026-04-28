@@ -1,0 +1,106 @@
+<template>
+  <div class="warehouse-page">
+    <div class="page-header">
+      <h2>出入库管理</h2>
+      <el-button type="primary" @click="showDialog = true">
+        <el-icon><Plus /></el-icon>新建记录
+      </el-button>
+    </div>
+
+    <el-card shadow="never">
+      <template #header>
+        <div class="card-header">
+          <el-radio-group v-model="filterAction" @change="fetchData" size="small">
+            <el-radio-button label="">全部</el-radio-button>
+            <el-radio-button label="入库">入库</el-radio-button>
+            <el-radio-button label="仓储巡检">仓储巡检</el-radio-button>
+            <el-radio-button label="出库复检">出库复检</el-radio-button>
+            <el-radio-button label="出库">出库</el-radio-button>
+          </el-radio-group>
+        </div>
+      </template>
+      <el-table :data="records" stripe v-loading="loading">
+        <el-table-column prop="id" label="记录编号" width="120" />
+        <el-table-column prop="productId" label="产品编号" width="120" />
+        <el-table-column prop="productName" label="产品名称" min-width="150" />
+        <el-table-column prop="action" label="操作类型" width="100">
+          <template #default="{ row }">
+            <el-tag :type="row.action === '出库' ? 'warning' : row.action === '入库' ? 'success' : 'info'" size="small">{{ row.action }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="operator" label="操作人" width="100" />
+        <el-table-column prop="date" label="日期" width="120" />
+        <el-table-column prop="notes" label="备注" min-width="180" />
+        <el-table-column label="状态" width="100">
+          <template #default="{ row }">
+            <StatusBadge :status="row.status" :label="row.status" />
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="pagination-wrap">
+        <el-pagination background layout="total, prev, pager, next" :total="total" />
+      </div>
+    </el-card>
+
+    <el-dialog v-model="showDialog" title="新建出入库记录" width="500px">
+      <el-form :model="form" label-width="100px">
+        <el-form-item label="产品编号">
+          <el-input v-model="form.productId" />
+        </el-form-item>
+        <el-form-item label="操作类型">
+          <el-select v-model="form.action" style="width:100%">
+            <el-option label="入库" value="入库" />
+            <el-option label="仓储巡检" value="仓储巡检" />
+            <el-option label="出库复检" value="出库复检" />
+            <el-option label="出库" value="出库" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="form.notes" type="textarea" :rows="3" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="showDialog = false">取消</el-button>
+        <el-button type="primary" @click="handleCreate">确认</el-button>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+import { fetchWarehouseRecords } from '@/api'
+import StatusBadge from '@/components/common/StatusBadge.vue'
+
+const records = ref([])
+const total = ref(0)
+const loading = ref(false)
+const showDialog = ref(false)
+const filterAction = ref('')
+const form = reactive({ productId: '', action: '入库', notes: '' })
+
+async function fetchData() {
+  loading.value = true
+  const params = filterAction.value ? { action: filterAction.value } : {}
+  const res = await fetchWarehouseRecords(params)
+  records.value = res.data.list
+  total.value = res.data.total
+  loading.value = false
+}
+function handleCreate() {
+  ElMessage.success('记录创建成功')
+  showDialog.value = false
+  fetchData()
+}
+
+onMounted(fetchData)
+</script>
+
+<style scoped>
+.warehouse-page { max-width: 1200px; margin: 0 auto; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.page-header h2 { font-size: 22px; }
+.card-header { display: flex; align-items: center; }
+.pagination-wrap { display: flex; justify-content: center; margin-top: 20px; }
+</style>
