@@ -1,4 +1,21 @@
-node_modules
-dist
+# Root
 .DS_Store
 *.local
+dist/
+.vite/
+
+# Frontend
+frontend/node_modules
+frontend/dist
+
+# Backend
+backend/__pycache__/
+backend/*.py[cod]
+backend/.venv/
+backend/venv/
+backend/*.egg-info/
+
+# Docker
+mysql-data/
+redis-data/
+minio-data/
