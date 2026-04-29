@@ -49,7 +49,9 @@ services:
       - craftwood-network
 
   redis:
-    image: redis:7-alpine
+    build:
+      context: ./docker/redis
+      dockerfile: Dockerfile
     ports:
       - "6379:6379"
     volumes:
@@ -59,15 +61,15 @@ services:
 
   minio:
     image: minio/minio:latest
-    command: server /data --console-address ":9001"
     ports:
       - "9000:9000"
       - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+    env_file:
+      - ./docker/minio/config.env
     volumes:
       - minio-data:/data
+      - ./docker/minio/entrypoint.sh:/docker/minio/entrypoint.sh:ro
+    entrypoint: ["/bin/sh", "/docker/minio/entrypoint.sh"]
     networks:
       - craftwood-network
 
