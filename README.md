@@ -1,4 +1,4 @@
-![img](images\CraftWoodAIVision.png)
+![img](.images\CraftWoodAIVision.png)
 # CraftWoodAIVision · 匠木云检
 
 CraftWoodAIVision 是一个面向红木家具生产、仓储、销售与售后场景的智能质检与可信履历平台。系统以"AI 辅助质检 + 数字化质量档案 + 二维码可信追溯"为核心，将传统依赖人工经验的质检流程重构为可记录、可复核、可追溯、可统计的数字化质量管理体系。
