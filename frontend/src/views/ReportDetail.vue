@@ -55,21 +55,22 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { fetchReportById } from '@/api'
+import type { Report } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
 const route = useRoute()
-const report = ref(null)
+const report = ref<Report | null>(null)
 const loading = ref(false)
 
 async function fetchData() {
   loading.value = true
-  const res = await fetchReportById(route.params.id)
-  report.value = res.data
+  const res = await fetchReportById(route.params.id as string)
+  report.value = res.data ?? null
   loading.value = false
 }
 function handlePrint() { window.print() }

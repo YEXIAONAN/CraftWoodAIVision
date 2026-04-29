@@ -46,7 +46,7 @@
   </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { useAuthStore } from '@/stores/auth'
@@ -55,7 +55,13 @@ const route = useRoute()
 const appStore = useAppStore()
 const authStore = useAuthStore()
 
-const menuItems = [
+interface MenuItem {
+  path: string
+  title: string
+  icon: string
+}
+
+const menuItems: MenuItem[] = [
   { path: '/dashboard', title: '工作台', icon: 'DataBoard' },
   { path: '/products', title: '产品档案', icon: 'Goods' },
   { path: '/inspection', title: 'AI 质检', icon: 'Camera' },
@@ -65,7 +71,7 @@ const menuItems = [
   { path: '/data-dashboard', title: '数据大屏', icon: 'DataAnalysis' },
 ]
 
-function isActive(path) {
+function isActive(path: string) {
   if (path === '/dashboard') return route.path === '/dashboard'
   return route.path.startsWith(path)
 }

@@ -108,18 +108,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { fetchProducts, createProduct } from '@/api'
+import type { Product } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
-const products = ref([])
+const products = ref<Product[]>([])
 const total = ref(0)
 const loading = ref(false)
 const showForm = ref(false)
 const showQR = ref(false)
-const qrProduct = ref(null)
+const qrProduct = ref<Product | null>(null)
 
 const filters = reactive({ keyword: '', status: '' })
 const form = reactive({ name: '', type: '红木家具', material: '', dimensions: '', batch: '', inspector: '' })
@@ -137,7 +138,7 @@ async function handleCreate() {
   showForm.value = false
   fetchData()
 }
-function handleQR(row) {
+function handleQR(row: Product) {
   qrProduct.value = row
   showQR.value = true
 }

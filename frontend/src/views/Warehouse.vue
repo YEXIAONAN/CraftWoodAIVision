@@ -68,18 +68,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { fetchWarehouseRecords } from '@/api'
+import type { WarehouseRecord, WarehouseAction } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
-const records = ref([])
+const records = ref<WarehouseRecord[]>([])
 const total = ref(0)
 const loading = ref(false)
 const showDialog = ref(false)
-const filterAction = ref('')
-const form = reactive({ productId: '', action: '入库', notes: '' })
+const filterAction = ref<WarehouseAction | ''>('')
+const form = reactive({ productId: '', action: '入库' as WarehouseAction, notes: '' })
 
 async function fetchData() {
   loading.value = true

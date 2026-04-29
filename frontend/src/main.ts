@@ -7,7 +7,7 @@ import App from './App.vue'
 import router from './router'
 import './styles/global.css'
 
-// Centralized ECharts registration (register once, use everywhere)
+// Centralized ECharts registration
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { LineChart, PieChart, BarChart, GaugeChart } from 'echarts/charts'
@@ -15,7 +15,7 @@ import {
   GridComponent,
   TooltipComponent,
   LegendComponent,
-  TitleComponent
+  TitleComponent,
 } from 'echarts/components'
 
 use([
@@ -27,7 +27,7 @@ use([
   GridComponent,
   TooltipComponent,
   LegendComponent,
-  TitleComponent
+  TitleComponent,
 ])
 
 const app = createApp(App)

@@ -79,13 +79,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { fetchDashboardStats } from '@/api'
+import type { DashboardStats } from '@/types'
 import VChart from 'vue-echarts'
 
-const stats = ref(null)
-const kpis = ref([])
+const stats = ref<DashboardStats | null>(null)
+const kpis = ref<{ label: string; value: string | number; color: string; unit: string; sub: string }[]>([])
 
 onMounted(async () => {
   const res = await fetchDashboardStats()
@@ -106,7 +107,7 @@ function toggleFullscreen() {
   }
 }
 
-const tooltipStyle = {
+const tooltipStyle: Record<string, unknown> = {
   backgroundColor: '#FFFFFF',
   borderColor: '#E8E0D5',
   borderWidth: 1,
@@ -118,7 +119,7 @@ const defectChartOption = computed(() => ({
   tooltip: {
     ...tooltipStyle,
     trigger: 'axis',
-    formatter: (params) => {
+    formatter: (params: any[]) => {
       const item = params[0]
       const total = stats.value?.defectDistribution?.reduce((a, b) => a + b.value, 0) || 1
       const pct = ((item.value / total) * 100).toFixed(1)

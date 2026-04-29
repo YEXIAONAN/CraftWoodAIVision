@@ -56,12 +56,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { fetchReports } from '@/api'
+import type { Report } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
-const reports = ref([])
+const reports = ref<Report[]>([])
 const keyword = ref('')
 
 async function fetchData() {

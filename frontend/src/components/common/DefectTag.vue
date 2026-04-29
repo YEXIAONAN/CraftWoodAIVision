@@ -9,27 +9,25 @@
   </el-tag>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 
-const props = defineProps({
-  type: String,
-  confidence: Number,
-  highlighted: Boolean
-})
+const props = defineProps<{
+  type?: string
+  confidence?: number
+  highlighted?: boolean
+}>()
 
-const tagType = computed(() => {
-  const map = {
-    '裂纹': 'danger',
-    '虫洞': 'danger',
-    '划痕': 'warning',
-    '磕碰': 'warning',
-    '色差': 'info',
-    '漆面异常': 'info',
-    '接缝异常': 'warning'
-  }
-  return map[props.type] || 'info'
-})
+const defectTypeMap: Record<string, string> = {
+  '裂纹': 'danger',
+  '虫洞': 'danger',
+  '划痕': 'warning',
+  '磕碰': 'warning',
+  '色差': 'info',
+  '漆面异常': 'info',
+  '接缝异常': 'warning',
+}
+const tagType = computed(() => defectTypeMap[props.type ?? ''] || 'info')
 </script>
 
 <style scoped>

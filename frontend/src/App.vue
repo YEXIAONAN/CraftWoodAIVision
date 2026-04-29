@@ -6,7 +6,7 @@
   </router-view>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted } from 'vue'
 import { useAppStore } from '@/stores/app'
 
@@ -14,7 +14,7 @@ const appStore = useAppStore()
 
 onMounted(() => {
   const root = document.documentElement
-  const tokens = {
+  const tokens: Record<string, string> = {
     '--el-color-primary': '#8B4513',
     '--el-color-primary-dark-2': '#6B3410',
     '--el-color-primary-light-3': '#A0724A',

@@ -6,12 +6,12 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
   server: {
     port: 5173,
-    host: true
+    host: true,
   },
   build: {
     rollupOptions: {
@@ -19,9 +19,9 @@ export default defineConfig({
         manualChunks: {
           'vendor-echarts': ['echarts', 'vue-echarts'],
           'vendor-element': ['element-plus', '@element-plus/icons-vue'],
-          'vendor-vue': ['vue', 'vue-router', 'pinia']
-        }
-      }
-    }
-  }
+          'vendor-vue': ['vue', 'vue-router', 'pinia'],
+        },
+      },
+    },
+  },
 })

@@ -49,21 +49,21 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import { fetchProductById } from '@/api'
+import type { Product } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
 const route = useRoute()
-const product = ref(null)
+const product = ref<Product | null>(null)
 const loading = ref(false)
 
 async function fetchData() {
   loading.value = true
-  const res = await fetchProductById(route.params.id)
-  product.value = res.data
+  const res = await fetchProductById(route.params.id as string)
+  product.value = res.data ?? null
   loading.value = false
 }
 

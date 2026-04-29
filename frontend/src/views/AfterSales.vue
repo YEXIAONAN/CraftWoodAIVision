@@ -76,18 +76,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { fetchAfterSales } from '@/api'
+import type { AfterSalesRecord, AfterSalesStatus, AfterSalesType } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
-const records = ref([])
+const records = ref<AfterSalesRecord[]>([])
 const total = ref(0)
 const loading = ref(false)
 const showDialog = ref(false)
-const filterStatus = ref('')
-const form = reactive({ productId: '', type: '运输损坏', description: '', customer: '' })
+const filterStatus = ref<AfterSalesStatus | ''>('')
+const form = reactive({ productId: '', type: '运输损坏' as AfterSalesType, description: '', customer: '' })
 
 async function fetchData() {
   loading.value = true
@@ -102,7 +103,7 @@ function handleCreate() {
   showDialog.value = false
   fetchData()
 }
-function handleProcess(row) {
+function handleProcess(row: AfterSalesRecord) {
   ElMessage.info(`开始处理工单 ${row.id}`)
 }
 

@@ -5,11 +5,11 @@
   </span>
 </template>
 
-<script setup>
-defineProps({
-  status: String,
-  label: String
-})
+<script setup lang="ts">
+defineProps<{
+  status?: string
+  label?: string
+}>()
 </script>
 
 <style scoped>

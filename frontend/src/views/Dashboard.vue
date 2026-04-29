@@ -100,20 +100,21 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { fetchDashboardStats, fetchInspections } from '@/api'
+import type { Inspection, DefectDistItem } from '@/types'
 import StatCard from '@/components/common/StatCard.vue'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 import VChart from 'vue-echarts'
 
 const authStore = useAuthStore()
 const loading = ref(true)
-const stats = ref([])
-const recentInspections = ref([])
-const trendData = ref({ dates: [], counts: [], passes: [] })
-const defectData = ref([])
+const stats = ref<{ label: string; value: string | number; icon: string; color: string; unit: string; trend?: string; trendPercent?: string; subtext: string }[]>([])
+const recentInspections = ref<Inspection[]>([])
+const trendData = ref<{ dates: string[]; counts: number[]; passes: number[] }>({ dates: [], counts: [], passes: [] })
+const defectData = ref<DefectDistItem[]>([])
 
 const greeting = computed(() => {
   const h = new Date().getHours()
@@ -127,7 +128,7 @@ onMounted(async () => {
   try {
     const [statsRes, insRes] = await Promise.all([
       fetchDashboardStats(),
-      fetchInspections()
+      fetchInspections(),
     ])
     const s = statsRes.data
     stats.value = [
@@ -138,9 +139,9 @@ onMounted(async () => {
     ]
     recentInspections.value = insRes.data.list.slice(0, 6)
     trendData.value = {
-      dates: s.weeklyTrend.map(t => t.date),
-      counts: s.weeklyTrend.map(t => t.count),
-      passes: s.weeklyTrend.map(t => t.pass)
+      dates: s.weeklyTrend.map((t: { date: string }) => t.date),
+      counts: s.weeklyTrend.map((t: { count: number }) => t.count),
+      passes: s.weeklyTrend.map((t: { pass: number }) => t.pass),
     }
     defectData.value = s.defectDistribution
   } finally {
@@ -148,7 +149,7 @@ onMounted(async () => {
   }
 })
 
-function getScoreColor(score) {
+function getScoreColor(score: number) {
   if (score >= 85) return '#4A7C59'
   if (score >= 70) return '#D4913E'
   return '#C0392B'
@@ -170,10 +171,10 @@ const trendOption = computed(() => ({
     borderWidth: 1,
     padding: [12, 16],
     textStyle: { color: '#1E1812', fontSize: 13 },
-    formatter: (params) => {
+    formatter: (params: any[]) => {
       const date = params[0].axisValue
       let html = `<div style="font-weight:600;margin-bottom:6px;font-size:14px">${date}</div>`
-      params.forEach(p => {
+      params.forEach((p: any) => {
         html += `<div style="display:flex;justify-content:space-between;gap:24px;margin-top:2px">
           <span>${p.marker} ${p.seriesName}</span>
           <b>${p.value}</b>
@@ -246,7 +247,7 @@ const defectOption = computed(() => ({
     borderWidth: 1,
     padding: [12, 16],
     textStyle: { color: '#1E1812', fontSize: 13 },
-    formatter: (params) => {
+    formatter: (params: any) => {
       return `<div style="font-weight:600;margin-bottom:4px">${params.name}</div>
         <div>数量: <b>${params.value}</b></div>
         <div>占比: <b>${params.percent}%</b></div>`

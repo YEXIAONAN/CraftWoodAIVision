@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import type { UserInfo, LoginResult } from '@/types'
 import { mockLogin, mockCurrentUser } from '@/mock'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null)
-  const token = ref(localStorage.getItem('token') || '')
+  const user = ref<UserInfo | null>(null)
+  const token = ref<string>(localStorage.getItem('token') || '')
 
   const isLoggedIn = computed(() => !!token.value)
   const userRole = computed(() => user.value?.role || '')
 
-  async function login(username, password) {
+  async function login(username: string, password: string): Promise<LoginResult> {
     const result = await mockLogin(username, password)
     token.value = result.token
     user.value = result.user
@@ -28,7 +29,7 @@ export const useAuthStore = defineStore('auth', () => {
   function loadUser() {
     const saved = localStorage.getItem('user')
     if (saved) {
-      user.value = JSON.parse(saved)
+      user.value = JSON.parse(saved) as UserInfo
     } else if (token.value) {
       user.value = mockCurrentUser()
     }

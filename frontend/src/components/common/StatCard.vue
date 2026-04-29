@@ -27,19 +27,21 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  label: String,
-  value: [String, Number],
-  unit: String,
-  icon: String,
-  color: { type: String, default: '#8B4513' },
-  iconBg: String,
-  trend: String,
-  trendPercent: [String, Number],
-  subtext: String
-})
-defineEmits(['click'])
+<script setup lang="ts">
+defineProps<{
+  label?: string
+  value?: string | number
+  unit?: string
+  icon?: string
+  color?: string
+  iconBg?: string
+  trend?: string
+  trendPercent?: string | number
+  subtext?: string
+}>()
+defineEmits<{
+  click: []
+}>()
 </script>
 
 <style scoped>

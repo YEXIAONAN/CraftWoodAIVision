@@ -51,18 +51,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchTraceData } from '@/api'
+import type { TraceData } from '@/types'
 
 const route = useRoute()
-const trace = ref(null)
+const trace = ref<TraceData | null>(null)
 const loading = ref(false)
 
 onMounted(async () => {
   loading.value = true
-  const res = await fetchTraceData(route.params.productId)
+  const res = await fetchTraceData(route.params.productId as string)
   trace.value = res.data
   loading.value = false
 })

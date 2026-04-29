@@ -79,21 +79,22 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { fetchInspectionById } from '@/api'
+import type { Inspection } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
 const route = useRoute()
-const item = ref(null)
+const item = ref<Inspection | null>(null)
 const loading = ref(false)
 
 async function fetchData() {
   loading.value = true
-  const res = await fetchInspectionById(route.params.id)
-  item.value = res.data
+  const res = await fetchInspectionById(route.params.id as string)
+  item.value = res.data ?? null
   loading.value = false
 }
 function handleReview() {

@@ -95,29 +95,30 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { submitInspection } from '@/api'
+import type { Inspection } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
-const uploadRef = ref(null)
+const uploadRef = ref<HTMLInputElement | null>(null)
 const preview = ref('')
 const dragOver = ref(false)
 const detecting = ref(false)
-const scene = ref('入库检测')
-const result = ref(null)
+const scene = ref<'入库检测' | '仓储巡检' | '出库复检'>('入库检测')
+const result = ref<(Inspection & { duration: number }) | null>(null)
 
-function handleFileChange(e) {
-  const file = e.target.files?.[0]
+function handleFileChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
   if (file) loadPreview(file)
 }
-function handleDrop(e) {
+function handleDrop(e: DragEvent) {
   dragOver.value = false
-  const file = e.dataTransfer.files?.[0]
+  const file = e.dataTransfer?.files?.[0]
   if (file) loadPreview(file)
 }
-function loadPreview(file) {
+function loadPreview(file: File) {
   if (!file.type.startsWith('image/')) {
     ElMessage.warning('请上传图片文件')
     return

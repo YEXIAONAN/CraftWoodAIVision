@@ -44,7 +44,7 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/app'
@@ -56,7 +56,7 @@ const appStore = useAppStore()
 const authStore = useAuthStore()
 const currentTime = ref('')
 
-let timer
+let timer: ReturnType<typeof setInterval> | undefined
 function updateTime() {
   const now = new Date()
   const h = String(now.getHours()).padStart(2, '0')

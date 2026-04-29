@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+interface BreadcrumbItem {
+  title: string
+  path?: string
+}
+
 export const useAppStore = defineStore('app', () => {
   const sidebarCollapsed = ref(false)
-  const breadcrumbs = ref([])
+  const breadcrumbs = ref<BreadcrumbItem[]>([])
 
   function initApp() {
     const saved = localStorage.getItem('sidebarCollapsed')
@@ -15,7 +20,7 @@ export const useAppStore = defineStore('app', () => {
     localStorage.setItem('sidebarCollapsed', JSON.stringify(sidebarCollapsed.value))
   }
 
-  function setBreadcrumbs(paths) {
+  function setBreadcrumbs(paths: BreadcrumbItem[]) {
     breadcrumbs.value = paths
   }
 
