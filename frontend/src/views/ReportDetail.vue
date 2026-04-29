@@ -7,7 +7,9 @@
       <h2>质检报告</h2>
       <div class="header-actions">
         <el-button @click="handlePrint">打印</el-button>
-        <el-button type="primary" @click="handleDownload">下载 PDF</el-button>
+        <a :href="`/api/reports/${reportId}/download`" target="_blank">
+          <el-button type="primary">下载报告</el-button>
+        </a>
       </div>
     </div>
 
@@ -41,7 +43,21 @@
             {{ report.score }}
           </span>
         </el-descriptions-item>
+        <el-descriptions-item v-if="product" label="材质">{{ product.material }}</el-descriptions-item>
+        <el-descriptions-item v-if="product" label="规格">{{ product.dimensions }}</el-descriptions-item>
+        <el-descriptions-item v-if="product" label="批次">{{ product.batch }}</el-descriptions-item>
+        <el-descriptions-item v-if="product" label="等级">{{ product.grade }}</el-descriptions-item>
       </el-descriptions>
+
+      <el-divider v-if="inspections && inspections.length" />
+      <h4 v-if="inspections && inspections.length" style="margin-bottom:12px;font-size:15px">关联检测记录</h4>
+      <el-table v-if="inspections && inspections.length" :data="inspections" size="small" border>
+        <el-table-column prop="id" label="记录编号" width="120" />
+        <el-table-column prop="scene" label="检测场景" width="120" />
+        <el-table-column prop="date" label="检测日期" width="120" />
+        <el-table-column prop="risk" label="风险等级" width="100" />
+        <el-table-column prop="score" label="评分" width="80" />
+      </el-table>
 
       <el-divider />
       <h4 style="margin-bottom:12px;font-size:15px">检测依据与说明</h4>
@@ -58,29 +74,47 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import { fetchReportById } from '@/api'
 import type { Report } from '@/types'
 import StatusBadge from '@/components/common/StatusBadge.vue'
 
 const route = useRoute()
+const reportId = route.params.id as string
 const report = ref<Report | null>(null)
+const product = ref<any>(null)
+const inspections = ref<any[]>([])
 const loading = ref(false)
 
 async function fetchData() {
   loading.value = true
-  const res = await fetchReportById(route.params.id as string)
-  report.value = res.data ?? null
-  loading.value = false
+  try {
+    const res = await fetchReportById(reportId)
+    if (res.data) {
+      const data = res.data as any
+      report.value = {
+        id: data.id,
+        productId: data.productId,
+        productName: data.productName,
+        date: data.date,
+        inspector: data.inspector,
+        conclusion: data.conclusion,
+        risk: data.risk,
+        score: data.score,
+      }
+      product.value = data.product ?? null
+      inspections.value = data.inspections ?? []
+    }
+  } finally {
+    loading.value = false
+  }
 }
 function handlePrint() { window.print() }
-function handleDownload() { ElMessage.success('报告下载中（演示功能）') }
 
 onMounted(fetchData)
 </script>
 
 <style scoped>
-.report-detail { max-width: 800px; margin: 0 auto; }
+.report-detail { max-width: 860px; margin: 0 auto; }
 .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .page-header h2 { flex: 1; font-size: 20px; }
 .header-actions { display: flex; gap: 8px; }

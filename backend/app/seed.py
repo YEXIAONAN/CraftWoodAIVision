@@ -1,10 +1,15 @@
 """CraftWoodAIVision Backend — Seed Data"""
 
-import datetime
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 
 from app.models import User, Product, InspectionRecord, WarehouseRecord, ReportRecord, AfterSalesRecord
 from app.security import hash_password
+
+
+def _now():
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
 
 PRODUCT_TYPES = ["红酸枝木沙发", "鸡翅木餐桌", "大果紫檀书桌", "红木茶台", "花梨木衣柜", "刺猬紫檀床", "黑酸枝办公桌", "红木圈椅"]
 MATERIALS = ["老挝大红酸枝", "缅甸鸡翅木", "大果紫檀", "东非黑黄檀"]
@@ -27,6 +32,8 @@ def seed_database(db: Session):
 
     if db.query(User).count() > 0:
         return  # already seeded
+
+    now = _now()
 
     # ---- User ----
     admin = User(
@@ -58,13 +65,12 @@ def seed_database(db: Session):
     db.flush()
 
     # ---- Inspections ----
-    inspections = []
     for i in range(12):
         defects = []
-        for _ in range(1 + (i % 5)):
+        for j in range(1 + (i % 5)):
             defects.append({
-                "type": DEFECT_TYPES[(i + _) % len(DEFECT_TYPES)],
-                "confidence": round(0.75 + (i + _) % 24 * 0.01, 2),
+                "type": DEFECT_TYPES[(i + j) % len(DEFECT_TYPES)],
+                "confidence": round(0.75 + (i + j) % 24 * 0.01, 2),
                 "bbox": [i * 20 % 300, i * 15 % 300, 50 + (i * 7) % 50, 30 + (i * 11) % 30],
                 "area": 50 + (i * 37) % 200,
             })
@@ -85,7 +91,6 @@ def seed_database(db: Session):
             notes="多处缺陷，建议人工复核" if len(defects) > 3 else "",
             reviewed=1 if i % 3 == 0 else 0,
         )
-        inspections.append(ins)
         db.add(ins)
 
     # ---- Warehouse Records ----
@@ -118,7 +123,7 @@ def seed_database(db: Session):
 
     # ---- After-Sales ----
     for i in range(6):
-        as_ = AfterSalesRecord(
+        as_record = AfterSalesRecord(
             id=f"AS-{i + 1:04d}",
             product_id=f"PROD-{(i % 18) + 1:04d}",
             product_name=PRODUCT_TYPES[(i + 4) % len(PRODUCT_TYPES)],
@@ -129,6 +134,6 @@ def seed_database(db: Session):
             date=f"2026-{(i % 3) + 1:02d}-{10 + (i % 18):02d}",
             handler=i < 4 and OPERATORS[i % len(OPERATORS)] or "",
         )
-        db.add(as_)
+        db.add(as_record)
 
     db.commit()

@@ -122,6 +122,20 @@ class WarehouseOut(BaseModel):
         populate_by_name = True
 
 
+class WarehouseCreate(BaseModel):
+    product_id: str
+    product_name: str = ""
+    action: str = "入库"
+    notes: str = ""
+
+
+class WarehouseUpdate(BaseModel):
+    action: Optional[str] = None
+    operator: Optional[str] = None
+    notes: Optional[str] = None
+    status: Optional[str] = None
+
+
 # ---- Report ----
 class ReportOut(BaseModel):
     id: str
@@ -136,6 +150,22 @@ class ReportOut(BaseModel):
     class Config:
         from_attributes = True
         populate_by_name = True
+
+
+class ReportCreate(BaseModel):
+    product_id: str
+    product_name: str = ""
+    inspector: str = ""
+    conclusion: str = "合格"
+    risk: str = "低风险"
+    score: float = 0.0
+
+
+class ReportUpdate(BaseModel):
+    conclusion: Optional[str] = None
+    risk: Optional[str] = None
+    score: Optional[float] = None
+    inspector: Optional[str] = None
 
 
 # ---- After-Sales ----
@@ -153,6 +183,21 @@ class AfterSalesOut(BaseModel):
     class Config:
         from_attributes = True
         populate_by_name = True
+
+
+class AfterSalesCreate(BaseModel):
+    product_id: str
+    product_name: str = ""
+    type: str = "运输损坏"
+    description: str = ""
+    customer: str = ""
+
+
+class AfterSalesUpdate(BaseModel):
+    handler: Optional[str] = None
+    status: Optional[str] = None
+    description: Optional[str] = None
+    type: Optional[str] = None
 
 
 # ---- Dashboard ----

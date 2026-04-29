@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { UserInfo, LoginResult } from '@/types'
-import { mockLogin, mockCurrentUser } from '@/mock'
+import { loginApi, fetchCurrentUser } from '@/api'
+import { ElMessage } from 'element-plus'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<UserInfo | null>(null)
@@ -11,7 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
   const userRole = computed(() => user.value?.role || '')
 
   async function login(username: string, password: string): Promise<LoginResult> {
-    const result = await mockLogin(username, password)
+    const result = await loginApi(username, password)
     token.value = result.token
     user.value = result.user
     localStorage.setItem('token', result.token)
@@ -26,12 +27,23 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('user')
   }
 
-  function loadUser() {
+  async function loadUser() {
     const saved = localStorage.getItem('user')
     if (saved) {
-      user.value = JSON.parse(saved) as UserInfo
-    } else if (token.value) {
-      user.value = mockCurrentUser()
+      try {
+        user.value = JSON.parse(saved) as UserInfo
+      } catch {
+        user.value = null
+      }
+    }
+    if (token.value) {
+      try {
+        const res = await fetchCurrentUser()
+        user.value = res.data ?? res
+        localStorage.setItem('user', JSON.stringify(user.value))
+      } catch {
+        logout()
+      }
     }
   }
 

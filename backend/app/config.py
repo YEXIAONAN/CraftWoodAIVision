@@ -12,10 +12,10 @@ class Settings:
     APP_VERSION: str = "0.1.0"
     DEBUG: bool = os.getenv("DEBUG", "true").lower() == "true"
 
-    # Database
+    # Database (defaults to local MySQL)
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        f"sqlite:///{BASE_DIR}/craftwood.db"
+        "mysql+pymysql://root:123456@localhost:3306/craftwood"
     )
 
     # JWT
